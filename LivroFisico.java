@@ -1,4 +1,4 @@
-public class LivroFisico extends Livro {
+public final class LivroFisico extends Livro {
 
     private int numeroExemplares;
     private String dimensoes;
@@ -6,7 +6,7 @@ public class LivroFisico extends Livro {
     @Override //annotations
     public String toString() {
         String descricao = super.toString();
-        descricao += " - Exemplares:" + getNumeroExemplares();
+        descricao += " - Formato:" + getNumeroExemplares();
         return descricao;
     }
 
@@ -21,5 +21,10 @@ public class LivroFisico extends Livro {
     }
     public void setDimensoes(String dimensoes) {
         this.dimensoes = dimensoes;
+    }
+
+    @Override
+    public String getTipoLivro(){
+        return "Físico";
     }
 }

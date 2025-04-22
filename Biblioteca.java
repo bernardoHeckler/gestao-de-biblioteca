@@ -1,19 +1,24 @@
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Biblioteca {
+
     //BD em memória
     private List<Livro> acervo = new ArrayList<>();
 
+    private final int ANO_PUBLICACAO_MINIMO = 1400;
+
     public Livro adicionar(Livro novoLivro) throws Exception {
-        if (novoLivro.getTitulo() == null || novoLivro.getTitulo().isEmpty() )
+
+        if (novoLivro.getTitulo() == null || novoLivro.getTitulo().isEmpty()) {
             throw new Exception("Título inválido!");
-        
+        }
+
         acervo.add(novoLivro);
 
         return novoLivro;
     }
-
 
     public List<Livro> pesquisarPorTitulo(String titulo) {
         List<Livro> livrosEncontrados = new ArrayList<>();
