@@ -2,40 +2,53 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Main {
+
+    public static final String limpeConsole = "\033[H\033[2J";
+
+    // Limpar a tela
+    public static void limparTela() {
+        System.out.print(limpeConsole);
+        System.out.flush();
+    }
+
     private static Biblioteca biblio = new Biblioteca();
 
     public static void main(String[] args) {
-        String menu = """
-                ====== SYSBIBLIO ======
-                Escolha uma das opções abaixo:
-                1 - Adicionar novo livro
-                2 - Pesquisar livro por título
-                3 - Listar todos os livros
-                4 - Remover livro por título
-                0 - Sair
-                """;
+        limparTela();
+        String menu = "====== SYSBIBLIO ======\n" +
+                "Escolha uma das opções abaixo:\n" +
+                "1 - Adicionar novo livro\n" +
+                "2 - Pesquisar livro por título\n" +
+                "3 - Listar todos os livros\n" +
+                "4 - Remover livro por título\n" +
+                "0 - Sair\n";
         int opcao;
-        Scanner lerTeclado = new Scanner(System.in); 
+        Scanner lerTeclado = new Scanner(System.in);
         do {
-            //System.out.println(menu);
-            //opcao = lerTeclado.nextInt();
-            //lerTeclado.nextLine(); //Limpar buffer entrada do console (teclado)
+            // System.out.println(menu);
+            // opcao = lerTeclado.nextInt();
+            // lerTeclado.nextLine(); //Limpar buffer entrada do console (teclado)
             opcao = inputNumerico(lerTeclado, menu);
             switch (opcao) {
                 case 1:
+                    limparTela();
                     adicionar(lerTeclado);
                     break;
                 case 3:
+                    limparTela();
                     pesquisarTodos();
                     break;
                 case 0:
+                    limparTela();
                     System.out.println("Encerrando programa ...");
                     break;
                 default:
+                    limparTela();
                     System.out.println("Opção inválida");
                     break;
             }
         } while (opcao != 0);
+
     }
 
     private static void adicionar(Scanner lerTeclado) {
@@ -58,7 +71,7 @@ public class Main {
             LivroFisico novoLivroFisico = (LivroFisico) novoLivro;
             novoLivroFisico.setDimensoes(dimensoes);
             novoLivroFisico.setNumeroExemplares(numeroExemplares);
-            //((LivroFisico) novoLivro).setDimensoes(dimensoes);
+            // ((LivroFisico) novoLivro).setDimensoes(dimensoes);
         } else {
             novoLivro = new LivroDigital();
             System.out.println("Digite o formato do arquivo:");
@@ -91,9 +104,8 @@ public class Main {
             for (Livro livro : livros) {
                 System.out.println(livro.toString());
             }
-        }  
+        }
     }
-
 
     private static int inputNumerico(Scanner lerTeclado, String mensagem) {
         int valor = 0;
