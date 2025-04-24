@@ -1,6 +1,4 @@
-
 import java.time.LocalDate;
-
 
 public abstract class Livro {
 
@@ -9,52 +7,57 @@ public abstract class Livro {
     private int anoPublicacao;
     private int numeroPaginas;
 
-    public abstract String getTipoLivro();
-
-    public final int calcularTempoPublicacao(){
-        int anoAtual = LocalDate.now().getYear();
-        return anoAtual - this.anoPublicacao;
+    public Livro(String titulo, String autor, int anoPublicacao, int numeroPaginas) {
+        this.titulo = titulo;
+        this.autor = autor;
+        this.anoPublicacao = anoPublicacao;
+        this.numeroPaginas = numeroPaginas;
     }
 
-    @Override //annotations
+    public abstract String getTipoLivro();
+
+    public final int calcularTempoPublicacao() {
+        return LocalDate.now().getYear() - this.anoPublicacao;
+    }
+
+    @Override
     public String toString() {
-        String descricao
-                = "Título: " + getTitulo()
-                + " - Autor: " + getAutor()
-                + " - Ano: " + getAnoPublicacao();
-        return descricao;
+        return "Título: " + titulo +
+                ", Autor: " + autor +
+                ", Ano: " + anoPublicacao +
+                ", Páginas: " + numeroPaginas;
     }
 
     public String getTitulo() {
         return titulo;
     }
 
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
-    }
-
     public String getAutor() {
         return autor;
-    }
-
-    public void setAutor(String autor) {
-        this.autor = autor;
     }
 
     public int getAnoPublicacao() {
         return anoPublicacao;
     }
 
-    public void setAnoPublicacao(int anoPublicacao) {
-        this.anoPublicacao = anoPublicacao;
-    }
-
     public int getNumeroPaginas() {
         return numeroPaginas;
+    }
+
+    //setters
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public void setAutor(String autor) {
+        this.autor = autor;
+    }
+
+    public void setAnoPublicacao(int anoPublicacao) {
+        this.anoPublicacao = anoPublicacao;
     }
 
     public void setNumeroPaginas(int numeroPaginas) {
         this.numeroPaginas = numeroPaginas;
     }
-
 }
