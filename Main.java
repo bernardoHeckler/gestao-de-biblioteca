@@ -1,4 +1,4 @@
-import java.util.InputMismatchException;
+import java.util.InputMismatchException; // Utilizado em de caso um tipo de dado não for o esperado, esperava int e não string
 import java.util.List;
 import java.util.Scanner;
 
@@ -15,6 +15,11 @@ public class Main {
     private static final Biblioteca biblioteca = new Biblioteca();
     private static final Scanner scanner = new Scanner(System.in);
 
+    private static void opcaoContinuar() {
+        System.out.println("Pressione Enter para continuar...");
+        scanner.nextLine();
+    }
+
     public static void main(String[] args) {
         limparTela();
         int opcao;
@@ -23,7 +28,7 @@ public class Main {
             opcao = lerOpcaoMenu();
             processarOpcao(opcao);
             if (opcao != 0) {
-                pausar();
+                opcaoContinuar();
             }
             limparTela();
         } while (opcao != 0);
@@ -52,9 +57,9 @@ public class Main {
                 entradaValida = true;
             } catch (InputMismatchException e) {
                 System.out.println("Erro: Entrada inválida. Digite um número inteiro.");
-                scanner.next(); // Limpa o buffer do scanner
+                scanner.next();
             }
-            scanner.nextLine(); // Consome a quebra de linha
+            scanner.nextLine();
         } while (!entradaValida);
         return opcao;
     }
@@ -84,42 +89,60 @@ public class Main {
                 System.out.println("Encerrando o sistema...");
                 break;
             default:
-                System.out.println("Opção inválida.");
+                System.out.println("Opção Inválida.");
         }
     }
 
     private static void adicionarLivro() {
         try {
             System.out.println("Adicionar Novo Livro");
-            System.out.print("Digite o título: ");
-            String titulo = scanner.nextLine().trim();
-            System.out.print("Digite o autor: ");
-            String autor = scanner.nextLine().trim();
-            int anoPublicacao = lerInteiro("Digite o ano de publicação: ", 1400, java.time.LocalDate.now().getYear());
-            int numeroPaginas = lerInteiroPositivo("Digite o número de páginas: ");
 
-            System.out.println("Tipo de Livro:");
-            System.out.println("1 - Físico");
-            System.out.println("2 - Digital");
-            int tipoLivro = lerOpcao(1, 2, "Escolha o tipo de livro (1 ou 2): ");
+            System.out.print("Título: ");
+            String titulo = scanner.nextLine().trim();
+
+            System.out.print("Autor: ");
+            String autor = scanner.nextLine().trim();
+
+            System.out.print("Ano de Publicação: ");
+            int anoPublicacao = scanner.nextInt();
+            scanner.nextLine();
+
+            System.out.print("Número de Páginas: ");
+            int numeroPaginas = scanner.nextInt();
+            scanner.nextLine();
+
+            System.out.println("Tipo de Livro (1-Físico, 2-Digital): ");
+            int tipoLivro = scanner.nextInt();
+            scanner.nextLine();
 
             Livro novoLivro;
+
             if (tipoLivro == 1) {
-                System.out.print("Digite as dimensões: ");
+                System.out.print("\nDimensões(Ex: '20cm x 14cm x 2cm'): ");
                 String dimensoes = scanner.nextLine().trim();
-                int numeroExemplares = lerInteiroPositivo("Digite o número de exemplares: ");
+
+                System.out.print("\nExemplares(Ex: 5 exemplares): ");
+                int numeroExemplares = scanner.nextInt();
+                scanner.nextLine();
+
                 novoLivro = new LivroFisico(titulo, autor, anoPublicacao, numeroPaginas, dimensoes, numeroExemplares);
             } else {
-                double tamanhoArquivo = lerDoublePositivo("Digite o tamanho do arquivo (MB): ");
+                System.out.print("\nDigite o Tamanho(Ex: '2.5MB', '10.1MB'): ");
+                double tamanhoArquivo = scanner.nextDouble();
+                scanner.nextLine();
+
+                System.out.print("\nFormato(Ex: 'PDF', 'ePub', 'MOBI'): ");
                 String formatoArquivo = scanner.nextLine().trim();
-                novoLivro = new LivroDigital(titulo, autor, anoPublicacao, numeroPaginas, formatoArquivo, tamanhoArquivo);
+
+                novoLivro = new LivroDigital(titulo, autor, anoPublicacao, numeroPaginas, formatoArquivo,
+                        tamanhoArquivo);
             }
 
             biblioteca.adicionarLivro(novoLivro);
-            System.out.println("Livro adicionado com sucesso!");
+            System.out.println("Livro foi adicionado!");
 
-        } catch (IllegalArgumentException e) {
-            System.out.println("Erro ao adicionar livro: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Erro ao adicionar livro.");
         }
     }
 
@@ -127,16 +150,26 @@ public class Main {
         System.out.println("Pesquisar Livro por Título");
         System.out.print("Digite o título a pesquisar: ");
         String titulo = scanner.nextLine().trim();
-        List<Livro> resultados = biblioteca.pesquisarLivroPorTitulo(titulo);
-        exibirResultadosDaPesquisa(resultados);
+
+        if (titulo.isEmpty()) {
+            System.out.println("Erro: O termo de pesquisa não pode ser vazio.");
+        } else {
+            List<Livro> resultados = biblioteca.pesquisarLivroPorTitulo(titulo);
+            exibirResultadosDaPesquisa(resultados);
+        }
     }
 
     private static void pesquisarLivroPorAutor() {
         System.out.println("Pesquisar Livro por Autor");
         System.out.print("Digite o autor a pesquisar: ");
         String autor = scanner.nextLine().trim();
-        List<Livro> resultados = biblioteca.pesquisarLivroPorAutor(autor);
-        exibirResultadosDaPesquisa(resultados);
+
+        if (autor.isEmpty()) {
+            System.out.println("Erro: O termo de pesquisa não pode ser vazio.");
+        } else {
+            List<Livro> resultados = biblioteca.pesquisarLivroPorAutor(autor);
+            exibirResultadosDaPesquisa(resultados);
+        }
     }
 
     private static void listarTodosOsLivros() {
@@ -162,11 +195,15 @@ public class Main {
 
     private static void exibirResultadosDaPesquisa(List<Livro> resultados) {
         if (resultados.isEmpty()) {
-            System.out.println("Nenhum livro encontrado.");
+            System.out.println("Nenhum livro foi Encontrado!");
         } else {
-            System.out.println("Resultados da pesquisa:");
+            limparTela();
+            System.out.println("RESULTADO DA PESQUISA:");
             for (Livro livro : resultados) {
-                System.out.println(livro.toString() + " (Tempo de Publicação: " + livro.calcularTempoPublicacao() + " anos)");
+                System.out.print(
+                        livro.toString() + "\nTempo de Publicação: " + livro.calcularTempoPublicacao() + " anos");
+                System.out.println("\n=====================================");
+
             }
         }
     }
@@ -186,71 +223,10 @@ public class Main {
                 }
             } catch (InputMismatchException e) {
                 System.out.println("Erro: Entrada inválida. Digite um número inteiro.");
-                scanner.next(); // Limpa o buffer do scanner
+                scanner.next();
             }
-            scanner.nextLine(); // Consome a quebra de linha
+            scanner.nextLine();
         } while (!entradaValida);
         return valor;
-    }
-
-    private static int lerInteiroPositivo(String mensagem) {
-        int valor = 0;
-        boolean entradaValida = false;
-        do {
-            try {
-                System.out.print(mensagem);
-                valor = scanner.nextInt();
-                if (valor > 0) {
-                    entradaValida = true;
-                } else {
-                    System.out.println("Erro: Valor deve ser positivo.");
-                }
-            } catch (InputMismatchException e) {
-                System.out.println("Erro: Entrada inválida. Digite um número inteiro.");
-                scanner.next(); // Limpa o buffer do scanner
-            }
-            scanner.nextLine(); // Consome a quebra de linha
-        } while (!entradaValida);
-        return valor;
-    }
-
-    private static double lerDoublePositivo(String mensagem) {
-        double valor = 0;
-        boolean entradaValida = false;
-        do {
-            try {
-                System.out.print(mensagem);
-                valor = scanner.nextDouble();
-                if (valor > 0) {
-                    entradaValida = true;
-                } else {
-                    System.out.println("Erro: Valor deve ser positivo.");
-                }
-            } catch (InputMismatchException e) {
-                System.out.println("Erro: Entrada inválida. Digite um número.");
-                scanner.next(); // Limpa o buffer do scanner
-            }
-            scanner.nextLine(); // Consome a quebra de linha
-        } while (!entradaValida);
-        return valor;
-    }
-
-    private static int lerOpcao(int min, int max, String mensagem) {
-        int opcao = 0;
-        boolean entradaValida = false;
-        do {
-            opcao = lerInteiro(mensagem, min, max);
-            if (opcao >= min && opcao <= max) {
-                entradaValida = true;
-            } else {
-                System.out.println("Erro: Opção inválida.");
-            }
-        } while (!entradaValida);
-        return opcao;
-    }
-
-    private static void pausar() {
-        System.out.println("Pressione Enter para continuar...");
-        scanner.nextLine();
     }
 }
