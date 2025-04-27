@@ -1,3 +1,7 @@
+// Atividade Prática feita em Grupo
+// Alunos: Bernardo Antunes Heckler; Gilmar Biolch; Gustavo Francisco;
+// RA's: 1137118; 1137267; 1137279.
+
 import java.util.InputMismatchException; // Utilizado em de caso um tipo de dado não for o esperado, esperava int e não string
 import java.util.List;
 import java.util.Scanner;
